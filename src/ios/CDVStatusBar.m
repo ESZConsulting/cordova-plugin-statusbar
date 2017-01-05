@@ -90,19 +90,19 @@ static const void *kStatusBarStyle = &kStatusBarStyle;
     }
 }
 
--(void)cordovaViewWillAppear:(NSNotification*)notification
-{
-    [self resizeWebView];
-}
-
--(void)statusBarDidChangeFrame:(NSNotification*)notification
-{
-    //add a small delay for iOS 7 ( 0.1 seconds )
-    __weak CDVStatusBar* weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [weakSelf resizeWebView];
-    });
-}
+//-(void)cordovaViewWillAppear:(NSNotification*)notification
+//{
+//    [self resizeWebView];
+//}
+//
+//-(void)statusBarDidChangeFrame:(NSNotification*)notification
+//{
+//    //add a small delay for iOS 7 ( 0.1 seconds )
+//    __weak CDVStatusBar* weakSelf = self;
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//        [weakSelf resizeWebView];
+//    });
+//}
 
 - (void)pluginInitialize
 {
@@ -115,9 +115,9 @@ static const void *kStatusBarStyle = &kStatusBarStyle;
     // observe the statusBarHidden property
     [[UIApplication sharedApplication] addObserver:self forKeyPath:@"statusBarHidden" options:NSKeyValueObservingOptionNew context:NULL];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name: UIApplicationDidChangeStatusBarFrameNotification object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cordovaViewWillAppear:) name: @"CDVViewWillAppearNotification" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name: UIApplicationDidChangeStatusBarFrameNotification object:nil];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cordovaViewWillAppear:) name: @"CDVViewWillAppearNotification" object:nil];
 
     _statusBarOverlaysWebView = YES; // default
 
@@ -448,6 +448,10 @@ static const void *kStatusBarStyle = &kStatusBarStyle;
 
 -(void)resizeWebView
 {
+    return;
+    // this breaks orientation locking and its absence doesn't affect anything
+    // so we don't use it pending a proper fix
+    
     BOOL isIOS7 = (IsAtLeastiOSVersion(@"7.0"));
 
     if (isIOS7) {
